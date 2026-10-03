@@ -2,7 +2,7 @@
 
 An AI-driven unique visitor counter built for the Katomaran Hackathon. It processes a video file (development) or a live RTSP stream (interview/production), detects faces with YOLOv8, recognises them with InsightFace (ArcFace-based embeddings), tracks them with ByteTrack, and logs every entry and exit. The final output is the number of **unique** visitors.
 
-**Demo video:** https://youtu.be/tkt9tmdvTMY
+**Demo video:** https://youtu.be/O5rbQZa9iQ4
 
 ---
 
