@@ -222,6 +222,29 @@ if not cap.isOpened():
         f"Could not open input source: {SOURCE}"
     )
 
+# =========================================================
+# OUTPUT VIDEO
+# =========================================================
+
+fps = cap.get(cv2.CAP_PROP_FPS)
+frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+if fps <= 0:
+    fps = 30
+
+output_path = "data/detection_output.mp4"
+
+fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+
+video_writer = cv2.VideoWriter(
+    output_path,
+    fourcc,
+    fps,
+    (frame_width, frame_height)
+)
+
+print(f"[INFO] Output video: {output_path}")
 
 # =========================================================
 # TRACKING / RECOGNITION DATA
@@ -316,6 +339,8 @@ while True:
 
     if not results:
 
+        video_writer.write(frame)
+
         cv2.imshow(
             "Face Tracker Pipeline",
             frame
@@ -329,6 +354,8 @@ while True:
     result = results[0]
 
     if result.boxes is None:
+
+        video_writer.write(frame)
 
         cv2.imshow(
             "Face Tracker Pipeline",
@@ -432,6 +459,8 @@ while True:
         EMBEDDING_INTERVAL > 1
         and frame_number % EMBEDDING_INTERVAL != 0
     ):
+
+        video_writer.write(frame)
 
         cv2.imshow(
             "Face Tracker Pipeline",
@@ -980,6 +1009,12 @@ while True:
 
 
     # =====================================================
+    # SAVE PROCESSED FRAME TO OUTPUT VIDEO
+    # =====================================================
+
+    video_writer.write(frame)
+
+    # =====================================================
     # DISPLAY VIDEO
     # =====================================================
 
@@ -1041,9 +1076,12 @@ for face_id in list(active_face_ids):
 # CLEANUP
 # =========================================================
 
+video_writer.release()
 cap.release()
 
 cv2.destroyAllWindows()
+
+print(f"[INFO] Output video saved: {output_path}")
 
 
 # =========================================================
